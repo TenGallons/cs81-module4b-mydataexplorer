@@ -16,3 +16,21 @@ const weekData = [
 ];
 
 console.log("Analyzing my weekly data...");
+
+function findHighestScreenTime(data) {
+  let best = data[0];
+  for (let d of data) {
+    if (d.screenTime > best.screenTime) best = d;
+  }
+  return best;
+}
+
+function averageSleep(data) {
+  let total = 0;
+  for (let d of data) total += d.sleepHours;
+  return Math.round((total / data.length) * 10) / 10;
+}
+
+const mostScreen = findHighestScreenTime(weekData);
+console.log("Most screen time:", mostScreen.day, "(" + mostScreen.screenTime + " hrs)");
+console.log("Average sleep:", averageSleep(weekData), "hrs");
