@@ -34,3 +34,46 @@ function averageSleep(data) {
 const mostScreen = findHighestScreenTime(weekData);
 console.log("Most screen time:", mostScreen.day, "(" + mostScreen.screenTime + " hrs)");
 console.log("Average sleep:", averageSleep(weekData), "hrs");
+
+function mostFrequentMood(data) {
+  const counts = {};
+  for (let d of data) {
+    counts[d.mood] = (counts[d.mood] || 0) + 1;
+  }
+  let bestMood = null;
+  let bestCount = 0;
+  for (let mood in counts) {
+    if (counts[mood] > bestCount) {
+      bestMood = mood;
+      bestCount = counts[mood];
+    }
+  }
+  return bestMood;
+}
+
+function correlateCaffeineToFocus(data) {
+  // Simple comparison: average focus on low caffeine (0-1 cups) vs high caffeine (2+ cups)
+  let lowTotal = 0, lowCount = 0;
+  let highTotal = 0, highCount = 0;
+
+  for (let d of data) {
+    if (d.caffeineIntake <= 1) {
+      lowTotal += d.focusLevel;
+      lowCount++;
+    } else {
+      highTotal += d.focusLevel;
+      highCount++;
+    }
+  }
+
+  const lowAvg = lowCount ? Math.round((lowTotal / lowCount) * 10) / 10 : null;
+  const highAvg = highCount ? Math.round((highTotal / highCount) * 10) / 10 : null;
+
+  return { lowAvg, highAvg };
+}
+
+console.log('Most frequent mood:', '"' + mostFrequentMood(weekData) + '"');
+
+const caf = correlateCaffeineToFocus(weekData);
+console.log("Avg focus (0-1 cups):", caf.lowAvg);
+console.log("Avg focus (2+ cups):", caf.highAvg);
